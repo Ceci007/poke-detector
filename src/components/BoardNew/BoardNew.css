@@ -1,0 +1,80 @@
+.board-container {
+  display: flex;
+  justify-content: center;
+  margin: 4rem auto;
+  width: 90%;
+  height: 100%;
+  background-image: linear-gradient(to right bottom, rgba(30,30,30, 0.6), rgba(30,30,30, 0.3));
+  backdrop-filter: blur(2rem);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 -1rem 6rem rgba(0,0,0, .6);
+}
+
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  border-radius: 3px;
+  border: dashed 3px rgba(255, 255, 255, 0.6);
+  display: block;
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+
+.board-items {
+  display: flex;
+  padding: 3rem 0;
+}
+
+.droppable-column {
+  padding-top: 3rem !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1rem;
+  position: relative;
+}
+
+.poke-item {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-bottom: 4rem;
+}
+
+.poke-draggable {
+  width: 95%;
+  height: 25rem;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 -1rem 6rem rgba(0,0,0, .6);
+  position: relative;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  border: 3px solid transparent;
+  margin-bottom: 2rem;
+}
+
+.dashed {
+  border: 3px dashed rgba(255, 255, 255, 0.6);
+}
+
+.droppable-column {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (max-width: 632px) {
+  
+}

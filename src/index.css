@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+@media only screen and (max-width: 1224px) {
+  html {
+    font-size: 50%;
+  }
+} 
+
+body {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(45deg, #111111, #000000);
+  overflow-y: auto;
+}
