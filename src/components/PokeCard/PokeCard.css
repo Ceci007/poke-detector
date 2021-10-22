@@ -1,4 +1,8 @@
 /*----------- PIKACHU HEADER -----------*/
+.pikachu-gradient {
+  background-image: linear-gradient(to right, #ffb347, #ffcc33);
+}
+
 .pikachu-header {
   position: relative;
   z-index: 200;
@@ -7,6 +11,8 @@
   background-image: linear-gradient(to right, #ffb347, #ffcc33);
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .pikachu-header::after {
@@ -24,6 +30,10 @@
 }
 
 /*----------- CHARMANDER HEADER -----------*/
+.charmander-gradient {
+  background-image: linear-gradient(to right, #f12711, #f5af19);
+}
+
 .charmander-header {
   position: relative;
   z-index: 200;
@@ -32,6 +42,8 @@
   background-image: linear-gradient(to right, #f12711, #f5af19);
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .charmander-header::after {
@@ -49,6 +61,10 @@
 }
 
 /*----------- BULBASAUR HEADER -----------*/
+.bulbasaur-gradient {
+  background-image: linear-gradient(to right, #56ab2f, #a8e063);
+}
+
 .bulbasaur-header {
   position: relative;
   z-index: 200;
@@ -57,6 +73,8 @@
   background-image: linear-gradient(to right, #56ab2f, #a8e063);
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .bulbasaur-header::after {
@@ -74,6 +92,10 @@
 }
 
 /*----------- SQUIRTLE HEADER -----------*/
+.squirtle-gradient {
+  background-image: linear-gradient(to right, #36d1dc, #5b86e5);
+}
+
 .squirtle-header {
   position: relative;
   z-index: 200;
@@ -82,6 +104,8 @@
   background-image: linear-gradient(to right, #36d1dc, #5b86e5);
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .squirtle-header::after {
@@ -99,6 +123,10 @@
 }
 
 /*----------- CLEFAIRY HEADER -----------*/
+.clefairy-gradient {
+  background-image: linear-gradient(to right, #ee9ca7, #ffdde1);
+}
+
 .clefairy-header {
   position: relative;
   z-index: 200;
@@ -107,6 +135,8 @@
   background-image: linear-gradient(to right, #ee9ca7, #ffdde1);
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .clefairy-header::after {
@@ -124,6 +154,10 @@
 }
 
 /*----------- GASTLY HEADER -----------*/
+.gastly-gradient {
+  background-image: linear-gradient(to right, #ad5389, #3c1053);
+}
+
 .gastly-header {
   position: relative;
   z-index: 200;
@@ -132,6 +166,8 @@
   background-image: linear-gradient(to right, #ad5389, #3c1053);
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .gastly-header::after {
@@ -181,3 +217,4 @@
   margin: 0 auto;
   object-fit: contain;
 }
+

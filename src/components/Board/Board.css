@@ -1,0 +1,126 @@
+.board-container {
+  display: flex;
+  justify-content: center;
+  margin: 4rem auto;
+  width: 90%;
+  height: 100%;
+  background-image: linear-gradient(to right bottom, rgba(30,30,30, 0.6), rgba(30,30,30, 0.3));
+  backdrop-filter: blur(2rem);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 -1rem 6rem rgba(0,0,0, .6);
+}
+
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  border-radius: 3px;
+  border: dashed 3px rgba(255, 255, 255, 0.6);
+  display: block;
+  margin-left: 1rem;
+  margin-top: 1rem;
+}
+
+.board-items {
+  display: flex;
+  padding: 3rem 0;
+}
+
+.droppable-column {
+  padding-top: 3rem !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1rem;
+  position: relative;
+}
+
+.poke-draggable {
+  width: 95%;
+  height: 25rem;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 -1rem 6rem rgba(0,0,0, .6);
+  position: relative;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  border: 3px solid transparent;
+  margin-bottom: 2rem;
+}
+
+.dashed {
+  border: 3px dashed rgba(255, 255, 255, 0.6);
+}
+
+.droppable-column {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.poke-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  position: relative;
+  background-color: dodgerblue;
+  z-index: 1000;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+
+.board-btn {
+  display: flex;
+  position: relative;
+  z-index: 700;
+  justify-items: center;
+  align-items: center;
+  margin: 2rem auto;
+  background-color: #fff;
+  padding: 1rem 4rem;
+  border: none;
+  border-radius: 6px;
+  text-transform: uppercase;
+  font-weight: 200;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 -1rem 6rem rgba(0,0,0, .3);
+}
+
+.pokeball-icon {
+  width: 2rem;
+  width: 2rem;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.pokeball-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.poke-item {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-bottom: 4rem;
+}
+
+@media screen and (max-width: 632px) {
+  
+}

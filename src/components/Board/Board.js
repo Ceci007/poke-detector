@@ -1,48 +1,37 @@
-import React, { useState, useContext } from "react";
-import { PokesContext } from '../../context/pokes.context';
+import React, { useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { defaultPokes } from "../../context/pokes.context";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { isEmpty } from "lodash";
+import { useTransition, animated } from 'react-spring';
 import PokeCard from "../PokeCard/PokeCard";
-import "./Board.css";
+import { isEmpty } from "lodash";
+import './Board.css';
 
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-const grid = 8;
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: "none",
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
-
-  // change background colour if dragging
-  background: isDragging ? "lightgray" : "transparent",
-
-  // styles we need to apply on draggables
-  ...draggableStyle
-});
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? "linear-gradient(to right bottom, rgba(30,30,30, 0.6), rgba(30,30,30, 0.3))" : "linear-gradient(to right bottom, rgba(30,30,30, 0.6), rgba(30,30,30, 0.3))",
-  padding: grid,
-  width: "100%",
-  position: "relative"
-});
+const queryAttr = "data-rbd-drag-handle-draggable-id";
 
 const Board = () => {
-  const queryAttr = "data-rbd-drag-handle-draggable-id";
-  const pokes = useContext(PokesContext);
+  const [columns, setColumns] = useState(defaultPokes);
+  const [items, setItems] = useState([]);
   const [placeholderProps, setPlaceholderProps] = useState({});
-  const [listItemsOne, updateListItemsOne] = useState(defaultPokes.colOne);
-  const [listItemsTwo, updateListItemsTwo] = useState(defaultPokes.colTwo);
+
+  const transition = useTransition(items, {
+    delay: 200,
+    from: { x: -250, y: 850, opacity: 0 },
+    enter: item => async (next) => {
+      await next({ y: item.y, delay: item.delay, opacity: 1 });
+      await next({ x: 0, opacity: 1 });
+    },
+    leave: { x: 250, y: 850, opacity: 0 },
+    /*delay: 200,*/
+    config: { mass: 5, tension: 500, friction: 100 },
+    delay: 250,
+    trail: 25,
+  });
+  
+  const handleAnimation = () => {  
+    setItems(v => v.length ? [] : [
+      { y: 0, delay: 200 },
+    ]);
+  }
 
   const handleDragStart = event => {
     const draggedDOM = getDraggedDom(event.draggableId);
@@ -73,27 +62,43 @@ const Board = () => {
     });
   };
 
-  const handleDragEnd = result => {
+  const handleDragEnd = (result, columns, setColumns) => {
     setPlaceholderProps({});
-    // dropped outside the list
-    if (!result.destination) {
-      return;
+  
+    if (!result.destination) return;
+    const { source, destination } = result;
+  
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId];
+      const destColumn = columns[destination.droppableId];
+      const sourceItems = [...sourceColumn.items];
+      const destItems = [...destColumn.items];
+      const [removed] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems
+        }
+      });
+    } else {
+      const column = columns[source.droppableId];
+      const copiedItems = [...column.items];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems
+        }
+      });
     }
-
-    const itemsOne = reorder(
-      listItemsOne,
-      result.source.index,
-      result.destination.index
-    );
-
-    const itemsTwo = reorder(
-      listItemsTwo,
-      result.source.index,
-      result.destination.index
-    );
-
-    updateListItemsOne(itemsOne);
-    updateListItemsTwo(itemsTwo);
   };
 
   const handleDragUpdate = event => {
@@ -146,103 +151,132 @@ const Board = () => {
     return draggedDOM;
   };
 
-  // Normally you would want to split things out into separate components.
-  // But in this example everything is just done in one place for simplicity
   return (
+    <>
+      <div className="poke-card" >
+      <button className="board-btn" onClick={handleAnimation}  >
+        <span className="pokeball-icon"><img src='/assets/Pokeball.png' /></span>
+        {items.length === 0 ? 'choose' : 'go back'}
+      </button>
+    <div style={{ margin: 60 }} />
+    </div>
     <div className="board-container">
       <DragDropContext
-      onDragEnd={handleDragEnd}
-      onDragStart={handleDragStart}
-      onDragUpdate={handleDragUpdate}
-      className="board-items"
-    >
-      <Droppable droppableId="droppable-1">
-        {(provided, snapshot) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            style={getListStyle(snapshot.isDraggingOver)}
-            className="droppable-column"
-          >
-            {listItemsOne.map((item, index) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={getItemStyle(
-                      snapshot.isDragging,
-                      provided.draggableProps.style
-                    )}
-                    className="poke-draggable">
-                    <div className="poke-item">
-                      <PokeCard {...item} key={item.id} />
-                    </div>
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-            {!isEmpty(placeholderProps) && snapshot.isDraggingOver && (
-              <div
-                className="placeholder"
-                style={{
-                  top: placeholderProps.clientY,
-                  left: placeholderProps.clientX,
-                  height: placeholderProps.clientHeight,
-                  width: placeholderProps.clientWidth
-                }}
-              />
-            )}
-          </div>
-        )}
-      </Droppable>
-      <Droppable droppableId="droppable-2">
-        {(provided, snapshot) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            style={getListStyle(snapshot.isDraggingOver)}
-            className="droppable-column"
-          >
-            {listItemsTwo.map((item, index) => (
-              <Draggable key={item.id} draggableId={item.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={getItemStyle(
-                      snapshot.isDragging,
-                      provided.draggableProps.style
-                    )}
-                    className="poke-draggable">
-                    <div className="poke-item">
-                      <PokeCard {...item} key={item.id} />
-                    </div>
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-            {!isEmpty(placeholderProps) && snapshot.isDraggingOver && (
-              <div
-                className="placeholder"
-                style={{
-                  top: placeholderProps.clientY,
-                  left: placeholderProps.clientX,
-                  height: placeholderProps.clientHeight,
-                  width: placeholderProps.clientWidth
-                }}
-              />
-            )}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+         onDragStart={handleDragStart}
+         onDragUpdate={handleDragUpdate}
+         onDragEnd={result => handleDragEnd(result, columns, setColumns)}
+      >
+        {Object.entries(columns).map(([columnId, column], index) => {
+          return (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
+              }}
+              key={columnId}
+            >
+              <div style={{ margin: 20 }}>
+                <Droppable droppableId={columnId} key={columnId}>
+                  {(provided, snapshot) => {
+                    return (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="droppable-column"
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? "linear-gradient(to left top, rgba(30,30,30, 0.4), rgba(30,30,30, 0.2))"
+                            : "linear-gradient(to right bottom, rgba(30,30,30, 0.4), rgba(30,30,30, 0.2))",
+                          padding: 10,
+                          width: 300,
+                          minHeight: 850,
+                        }}
+                      >
+                        {column.items.map((item, index) => {
+                          return (
+                            <Draggable
+                              key={item.id}
+                              draggableId={item.id}
+                              index={index}
+                            >
+                              {(provided, snapshot) => {
+                                return (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    className="poke-draggable"
+                                    style={{
+                                      userSelect: "none",
+                                      minHeight: "250px",
+                                      backgroundColor: snapshot.isDragging
+                                        ? "lightgray"
+                                        : "transparent",
+                                      color: "white",
+                                      ...provided.draggableProps.style
+                                    }}
+                                  >
+                                  { transition((style, el) => 
+                                    el &&
+                                    <animated.div style={style} className="poke-item">
+                                      <PokeCard {...item} key={item.id} />
+                                    </animated.div>
+                                  )}
+                                  </div>
+                                );
+                              }}
+                            </Draggable>
+                          );
+                        })}
+                        {provided.placeholder}
+                        {!isEmpty(placeholderProps) && snapshot.isDraggingOver && (
+                          <div
+                            className="placeholder"
+                            style={{
+                              top: placeholderProps.clientY,
+                              left: placeholderProps.clientX,
+                              height: placeholderProps.clientHeight,
+                              width: placeholderProps.clientWidth
+                            }}
+                          />
+                        )}
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </div>
+            </div>
+          );
+        })}
+      </DragDropContext>
     </div>
+    </>
   );
-};
+}
 
 export default Board;
+
+/*
+ const [items, setItems] = useState([]);
+  const [check, setCheck] = useState(false);
+
+  const transition = useTransition(items, {
+    delay: 200,
+    from: { x: -250, y: 850, opacity: 0 },
+    enter: item => async (next) => {
+      await next({ y: item.y, delay: item.delay, opacity: 1 });
+      await next({ x: 0, opacity: 1 });
+    },
+    leave: { x: 250, y: 850, opacity: 0 },
+    /*delay: 200,
+    config: { mass: 5, tension: 500, friction: 100 },
+    delay: 250,
+    trail: 25,
+  });
+  
+  const handleAnimation = () => {  
+    setItems(v => v.length ? [] : [
+      { y: 0 }
+    ]);
+  }*/

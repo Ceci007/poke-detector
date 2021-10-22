@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Home from './containers/Home/Home';
-import Board from './components/Board/Board'
-import BoardNew from './components/BoardNew/BoardNew';
+import Board from './components/Board/Board';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BoardNew />
+    <Home />
   </React.StrictMode>,
   document.getElementById('root')
 );
