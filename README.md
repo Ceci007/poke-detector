@@ -1,1 +1,1 @@
-# Poke-Detector
+# PokeDetector
