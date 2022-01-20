@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Home from './containers/Home/Home';
-import Board from './components/Board/Board';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
